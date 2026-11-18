@@ -135,13 +135,17 @@
           </strong>
 
           <ion-input
-            *ngIf="editandoNombre"
-            [(ngModel)]="nombreEditado"
-            placeholder="Escribe tu nombre"
-            [maxlength]="80"
-            fill="outline"
-            class="campo-nombre"
-          ></ion-input>
+  *ngIf="editandoNombre"
+  [(ngModel)]="nombreEditado"
+  type="text"
+  inputmode="text"
+  autocomplete="name"
+  placeholder="Escribe tu nombre"
+  [maxlength]="80"
+  fill="outline"
+  color="success"
+  class="campo-nombre"
+></ion-input>
         </div>
       </div>
 

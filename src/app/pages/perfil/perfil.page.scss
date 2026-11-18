@@ -15,6 +15,17 @@
   color: var(--texto);
 }
 
+ion-content.pagina-perfil {
+  --padding-top: 0px;
+  --padding-start: 0px;
+  --padding-end: 0px;
+
+  /* Espacio para la navegación inferior */
+  --padding-bottom: calc(
+    160px + env(safe-area-inset-bottom, 0px)
+  );
+}
+
 // ==========================================
 // ENCABEZADO
 // ==========================================
@@ -257,9 +268,24 @@
 }
 
 .campo-nombre {
-  --border-radius: 10px;
-  --highlight-color: var(--verde-principal);
+  --background: #ffffff;
+  --color: #333333;
+  --placeholder-color: #777777;
+  --highlight-color: #2e7d32;
+  --border-color: #a9c9af;
+
+  color: #333333;
+  background: #ffffff;
+
+  font-size: 16px;
   min-height: 45px;
+  opacity: 1;
+}
+
+.campo-nombre::part(native) {
+  color: #333333;
+  -webkit-text-fill-color: #333333;
+  opacity: 1;
 }
 
 .acciones-edicion {
@@ -587,8 +613,8 @@
 
 @media (max-width: 480px) {
   .contenedor-perfil {
-    padding: 14px 12px 105px;
-  }
+  padding: 14px 12px 24px;
+}
 
   .tarjeta-informacion,
   .tarjeta-publicaciones,

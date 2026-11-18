@@ -703,13 +703,23 @@ export class SupabaseService {
     const ruta =
       `${user.id}/${crypto.randomUUID()}.${extension}`;
 
-    const { error: errorSubida } =
-      await this.supabase.storage
-        .from(this.bucketPerfiles)
-        .upload(ruta, archivo, {
-          contentType: archivo.type,
-          upsert: false,
-        });
+    // Leer la fotografía antes de enviarla a Supabase
+const contenidoFoto = await archivo.arrayBuffer();
+
+if (contenidoFoto.byteLength === 0) {
+  throw new Error(
+    'La fotografía está vacía o no se pudo leer. Selecciona otra imagen.'
+  );
+}
+
+// Subir la fotografía a Supabase Storage
+const { error: errorSubida } =
+  await this.supabase.storage
+    .from(this.bucketPerfiles)
+    .upload(ruta, contenidoFoto, {
+      contentType: archivo.type,
+      upsert: false,
+    });
 
     if (errorSubida) {
       console.error(

@@ -18,7 +18,7 @@
 }
 
 /* =========================================
-   FONDO GENERAL
+   FONDO GENERAL Y ESPACIO DE NAVEGACIÓN
    ========================================= */
 
 .pagina-explorar {
@@ -30,7 +30,11 @@ ion-content.pagina-explorar {
   --padding-top: 20px;
   --padding-start: 16px;
   --padding-end: 16px;
-  --padding-bottom: 160px;
+
+  /* Espacio para la navegación inferior */
+  --padding-bottom: calc(
+    160px + env(safe-area-inset-bottom, 0px)
+  );
 }
 
 /* =========================================
@@ -650,9 +654,11 @@ ion-content.pagina-explorar {
 
 @media (max-width: 480px) {
 
-  ion-content.pagina-explorar::part(scroll) {
-    padding: 14px 12px 90px;
-  }
+  ion-content.pagina-explorar {
+  --padding-top: 14px;
+  --padding-start: 12px;
+  --padding-end: 12px;
+}
 
   .bienvenida-explorar {
     padding: 23px 18px;

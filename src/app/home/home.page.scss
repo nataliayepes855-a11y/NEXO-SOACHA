@@ -750,9 +750,12 @@ ion-content.pagina-inicio {
 
 @media (max-width: 480px) {
 
-  ion-content.pagina-inicio::part(scroll) {
-    padding: 14px 12px 90px;
-  }
+  ion-content.pagina-inicio {
+  --padding-top: 14px;
+  --padding-start: 12px;
+  --padding-end: 12px;
+  --padding-bottom: calc(160px + env(safe-area-inset-bottom, 0px));
+}
 
   .bienvenida {
     padding: 23px 18px;
