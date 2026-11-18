@@ -3,19 +3,32 @@
   --background: #f0f7f1;
 }
 
+/* =========================================
+   ENCABEZADO VERDE - NEXO SOACHA
+   ========================================= */
+
 .encabezado {
-  ion-toolbar {
-    --background: #1b4d2e;
-    --color: #ffffff;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+}
 
-    ion-title {
-      font-weight: 700;
+.encabezado ion-toolbar {
+  --background: #1b4d2e;
+  --color: #ffffff;
+  --min-height: 62px;
+  --padding-start: 12px;
+  --padding-end: 12px;
+}
 
-      span {
-        color: #a3e4d7;
-      }
-    }
-  }
+.encabezado ion-title {
+  padding: 0 8px;
+  font-size: 21px;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+  text-align: left;
+}
+
+.encabezado ion-title span {
+  color: #a3e4d7;
 }
 
 .contenedor-principal {

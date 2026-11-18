@@ -24,9 +24,11 @@
   color: var(--texto);
 }
 
-ion-content.pagina-inicio::part(scroll) {
-  padding: 20px 16px 90px;
-  box-sizing: border-box;
+ion-content.pagina-inicio {
+  --padding-top: 20px;
+  --padding-start: 16px;
+  --padding-end: 16px;
+  --padding-bottom: 110px;
 }
 
 /* =========================================
