@@ -1,0 +1,426 @@
+
+<ion-header class="encabezado">
+  <ion-toolbar>
+    <ion-title>
+      Mi <span>perfil</span>
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="false" class="pagina-perfil">
+
+  <!-- CARGANDO PERFIL -->
+  <div class="estado-carga" *ngIf="cargando">
+    <ion-spinner name="crescent"></ion-spinner>
+    <p>Cargando tu perfil...</p>
+  </div>
+
+  <!-- MENSAJES -->
+  <div class="mensaje-error" *ngIf="mensajeError">
+    {{ mensajeError }}
+  </div>
+
+  <div class="mensaje-exito" *ngIf="mensajeExito">
+    {{ mensajeExito }}
+  </div>
+
+  <!-- PERFIL CON SESIÓN INICIADA -->
+  <div
+    class="contenedor-perfil"
+    *ngIf="!cargando && haySesion"
+  >
+
+    <!-- TARJETA PRINCIPAL -->
+    <section class="tarjeta-perfil">
+
+      <div class="portada-perfil"></div>
+
+      <div class="informacion-principal">
+
+        <!-- FOTO DE PERFIL -->
+        <div class="contenedor-avatar">
+
+          <div class="avatar-perfil">
+
+            <img
+              *ngIf="fotoPerfil"
+              [src]="fotoPerfil"
+              alt="Mi fotografía de perfil"
+              class="foto-usuario"
+            />
+
+            <span
+              *ngIf="!fotoPerfil"
+              class="iniciales-usuario"
+            >
+              {{ obtenerIniciales(nombre) }}
+            </span>
+
+          </div>
+
+          <button
+            type="button"
+            class="boton-camara"
+            (click)="abrirSelectorFoto()"
+            [disabled]="subiendoFoto"
+            aria-label="Cambiar fotografía de perfil"
+          >
+            <ion-icon
+              *ngIf="!subiendoFoto"
+              name="camera-outline"
+            ></ion-icon>
+
+            <ion-spinner
+              *ngIf="subiendoFoto"
+              name="crescent"
+            ></ion-spinner>
+          </button>
+
+        </div>
+
+        <!-- SELECTOR DE ARCHIVO -->
+        <input
+          #selectorFoto
+          type="file"
+          accept="image/jpeg,image/png,image/webp"
+          class="selector-foto"
+          (change)="seleccionarFoto($event)"
+        />
+
+        <h2>{{ nombre }}</h2>
+
+        <p class="correo">{{ correo }}</p>
+
+        <p class="etiqueta-miembro">
+          Miembro de NEXO SOACHA
+        </p>
+
+        <ion-button
+          fill="outline"
+          class="boton-cambiar-foto"
+          (click)="abrirSelectorFoto()"
+          [disabled]="subiendoFoto"
+        >
+          <ion-icon
+            name="camera-outline"
+            slot="start"
+          ></ion-icon>
+
+          {{ subiendoFoto ? 'Guardando fotografía...' : 'Cambiar fotografía' }}
+        </ion-button>
+
+        <p class="ayuda-foto">
+          Formatos JPG, PNG o WEBP. Máximo 5 MB.
+        </p>
+
+      </div>
+
+    </section>
+
+    <!-- INFORMACIÓN PERSONAL -->
+    <section class="tarjeta-informacion">
+
+      <div class="titulo-seccion">
+        <h3>Información personal</h3>
+        <p>Consulta y actualiza tus datos.</p>
+      </div>
+
+      <!-- NOMBRE -->
+      <div class="fila-informacion">
+        <div class="icono-informacion">
+          <ion-icon name="person-outline"></ion-icon>
+        </div>
+
+        <div class="detalle-informacion">
+          <span class="etiqueta">Nombre completo</span>
+          <strong *ngIf="!editandoNombre">
+            {{ nombre }}
+          </strong>
+
+          <ion-input
+            *ngIf="editandoNombre"
+            [(ngModel)]="nombreEditado"
+            placeholder="Escribe tu nombre"
+            [maxlength]="80"
+            fill="outline"
+            class="campo-nombre"
+          ></ion-input>
+        </div>
+      </div>
+
+      <!-- ACCIONES DE EDICIÓN -->
+      <div class="acciones-edicion">
+
+        <ion-button
+          *ngIf="!editandoNombre"
+          fill="outline"
+          (click)="activarEdicionNombre()"
+        >
+          <ion-icon
+            name="create-outline"
+            slot="start"
+          ></ion-icon>
+          Editar nombre
+        </ion-button>
+
+        <ng-container *ngIf="editandoNombre">
+
+          <ion-button
+            (click)="guardarNombre()"
+            [disabled]="guardandoNombre || !nombreEditado.trim()"
+          >
+            <ion-icon
+              name="save-outline"
+              slot="start"
+            ></ion-icon>
+            {{ guardandoNombre ? 'Guardando...' : 'Guardar' }}
+          </ion-button>
+
+          <ion-button
+            fill="outline"
+            (click)="cancelarEdicionNombre()"
+            [disabled]="guardandoNombre"
+          >
+            <ion-icon
+              name="close-outline"
+              slot="start"
+            ></ion-icon>
+            Cancelar
+          </ion-button>
+
+        </ng-container>
+
+      </div>
+
+      <!-- CORREO -->
+      <div class="fila-informacion fila-correo">
+        <div class="icono-informacion">
+          <ion-icon name="mail-outline"></ion-icon>
+        </div>
+
+        <div class="detalle-informacion">
+          <span class="etiqueta">Correo electrónico</span>
+          <strong>{{ correo }}</strong>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- MIS PUBLICACIONES -->
+    <section class="tarjeta-publicaciones">
+
+      <div class="encabezado-publicaciones">
+        <div>
+          <h3>Mis publicaciones</h3>
+          <p>
+            {{ misPublicaciones.length }}
+            {{ misPublicaciones.length === 1 ? 'publicación' : 'publicaciones' }}
+          </p>
+        </div>
+
+        <ion-button
+          fill="outline"
+          (click)="cargarMisPublicaciones()"
+          [disabled]="cargandoPublicaciones"
+        >
+          <ion-icon
+            name="refresh-outline"
+            slot="start"
+          ></ion-icon>
+          Actualizar
+        </ion-button>
+      </div>
+
+      <!-- CARGANDO PUBLICACIONES -->
+      <div
+        class="estado-carga"
+        *ngIf="cargandoPublicaciones"
+      >
+        <ion-spinner name="crescent"></ion-spinner>
+        <p>Cargando tus publicaciones...</p>
+      </div>
+
+      <div
+        class="mensaje-error"
+        *ngIf="errorPublicaciones && !cargandoPublicaciones"
+      >
+        {{ errorPublicaciones }}
+      </div>
+
+      <!-- LISTADO -->
+      <div
+        class="lista-mis-publicaciones"
+        *ngIf="!cargandoPublicaciones && !errorPublicaciones"
+      >
+
+        <article
+          class="mi-publicacion"
+          *ngFor="let publicacion of misPublicaciones"
+        >
+
+          <div class="datos-publicacion">
+            <ion-badge>
+              {{ publicacion.categoria }}
+            </ion-badge>
+
+            <span class="fecha-publicacion">
+              <ion-icon name="calendar-outline"></ion-icon>
+              {{ publicacion.created_at | date:'dd/MM/yyyy' }}
+            </span>
+          </div>
+
+          <p class="contenido-publicacion">
+            {{ publicacion.contenido }}
+          </p>
+
+          <div
+            class="imagen-publicacion"
+            *ngIf="publicacion.imagen_url"
+          >
+            <img
+              [src]="publicacion.imagen_url"
+              alt="Fotografía de mi publicación"
+              loading="lazy"
+            />
+          </div>
+
+        </article>
+
+        <!-- SIN PUBLICACIONES -->
+        <div
+          class="sin-publicaciones"
+          *ngIf="misPublicaciones.length === 0"
+        >
+          <ion-icon name="images-outline"></ion-icon>
+
+          <h4>Aún no tienes publicaciones</h4>
+
+          <p>
+            Comparte novedades, ideas y experiencias
+            con la comunidad de Soacha.
+          </p>
+
+          <ion-button routerLink="/publicar">
+            Crear mi primera publicación
+          </ion-button>
+        </div>
+
+      </div>
+
+    </section>
+
+    <!-- CERRAR SESIÓN -->
+    <section class="tarjeta-sesion">
+      <h3>Mi cuenta</h3>
+
+      <p>
+        Puedes cerrar tu sesión de forma segura
+        cuando lo necesites.
+      </p>
+
+      <ion-button
+        expand="block"
+        fill="outline"
+        color="danger"
+        class="btn-salir-perfil"
+        (click)="cerrarSesion()"
+        [disabled]="cerrandoSesion"
+      >
+        <ion-spinner
+          *ngIf="cerrandoSesion"
+          name="crescent"
+        ></ion-spinner>
+
+        <ion-icon
+          *ngIf="!cerrandoSesion"
+          name="log-out-outline"
+          slot="start"
+        ></ion-icon>
+
+        {{ cerrandoSesion ? 'Cerrando sesión...' : 'Cerrar sesión' }}
+      </ion-button>
+
+    </section>
+
+  </div>
+
+  <!-- SIN SESIÓN -->
+  <div
+    class="contenedor-perfil"
+    *ngIf="!cargando && !haySesion"
+  >
+    <section class="tarjeta-perfil sin-sesion">
+
+      <ion-icon
+        name="person-circle-outline"
+        class="icono-sin-sesion"
+      ></ion-icon>
+
+      <h2>No has iniciado sesión</h2>
+
+      <p class="correo">
+        Inicia sesión para acceder a tu perfil,
+        publicar y participar en la comunidad.
+      </p>
+
+      <ion-button
+        expand="block"
+        class="btn-iniciar"
+        (click)="irAIniciarSesion()"
+      >
+        Iniciar sesión
+      </ion-button>
+
+    </section>
+  </div>
+
+</ion-content>
+
+<!-- NAVEGACIÓN INFERIOR -->
+<ion-footer class="navegacion-inferior">
+  <ion-toolbar>
+    <div class="menu-inferior">
+
+      <a
+        routerLink="/home"
+        routerLinkActive="activo"
+      >
+        <ion-icon name="home-outline"></ion-icon>
+        <span>Inicio</span>
+      </a>
+
+      <a
+        routerLink="/explorar"
+        routerLinkActive="activo"
+      >
+        <ion-icon name="compass-outline"></ion-icon>
+        <span>Explorar</span>
+      </a>
+
+      <a
+        routerLink="/publicar"
+        routerLinkActive="activo"
+      >
+        <ion-icon name="add-circle-outline"></ion-icon>
+        <span>Publicar</span>
+      </a>
+
+      <a
+        routerLink="/chatbot"
+        routerLinkActive="activo"
+      >
+        <ion-icon name="chatbubbles-outline"></ion-icon>
+        <span>Chatbot</span>
+      </a>
+
+      <a
+        routerLink="/perfil"
+        routerLinkActive="activo"
+      >
+        <ion-icon name="person-circle-outline"></ion-icon>
+        <span>Perfil</span>
+      </a>
+
+    </div>
+  </ion-toolbar>
+</ion-footer>

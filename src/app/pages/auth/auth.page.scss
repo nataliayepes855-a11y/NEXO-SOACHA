@@ -1,0 +1,363 @@
+
+.pagina-auth {
+  --background: #f3f7f3;
+}
+
+.contenedor-auth {
+  width: 100%;
+  max-width: 520px;
+  margin: 0 auto;
+  padding: 24px 18px;
+  box-sizing: border-box;
+}
+
+.presentacion {
+  text-align: center;
+  padding: 12px 8px 24px;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 64px;
+  height: 64px;
+  margin: 0 auto 14px;
+  border-radius: 20px;
+  background: #205c43;
+  color: #fff;
+  font-size: 23px;
+  font-weight: 800;
+  letter-spacing: 1px;
+}
+
+.presentacion h1 {
+  margin: 0 0 10px;
+  color: #205c43;
+  font-size: 26px;
+  font-weight: 750;
+}
+
+.presentacion p {
+  max-width: 370px;
+  margin: 0 auto;
+  color: #5b6a60;
+  line-height: 1.6;
+}
+
+.tarjeta-auth {
+  padding: 22px;
+  background: #fff;
+  border: 1px solid #e4ebe5;
+  border-radius: 18px;
+  box-shadow: 0 5px 22px rgb(25 65 43 / 7%);
+}
+
+.pestanas {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6px;
+  padding: 5px;
+  margin-bottom: 24px;
+  border-radius: 12px;
+  background: #eef3ef;
+}
+
+.pestanas button {
+  min-height: 42px;
+  padding: 8px;
+  border: none;
+  border-radius: 9px;
+  background: transparent;
+  color: #526359;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.pestanas button.activa {
+  background: #fff;
+  color: #205c43;
+  box-shadow: 0 1px 5px rgb(0 0 0 / 8%);
+}
+
+.pestanas button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.tarjeta-auth h2 {
+  margin: 0 0 8px;
+  color: #263b30;
+  font-size: 21px;
+  font-weight: 700;
+}
+
+.descripcion {
+  margin: 0 0 22px;
+  color: #68756d;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.tarjeta-auth form {
+  display: flex;
+  flex-direction: column;
+  gap: 11px;
+}
+
+.tarjeta-auth label {
+  margin-top: 5px;
+  color: #33483b;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.tarjeta-auth input {
+  width: 100%;
+  min-height: 46px;
+  box-sizing: border-box;
+  padding: 12px;
+  border: 1px solid #d5ded7;
+  border-radius: 10px;
+  background: #fff;
+  color: #263b30;
+  font: inherit;
+}
+
+.tarjeta-auth input:focus {
+  border-color: #438566;
+  outline: 2px solid #d8eadf;
+}
+
+.tarjeta-auth input::placeholder {
+  color: #929b95;
+}
+
+.tarjeta-auth ion-button {
+  margin-top: 12px;
+  --background: #205c43;
+  --background-hover: #174832;
+  --border-radius: 10px;
+  --color: #fff;
+  min-height: 46px;
+  font-weight: 650;
+}
+
+/* MOSTRAR Y OCULTAR CONTRASEÑAS */
+
+.campo-contrasena {
+  position: relative;
+  width: 100%;
+}
+
+.campo-contrasena input {
+  padding-right: 54px;
+}
+
+.boton-ojo {
+  position: absolute;
+  top: 50%;
+  right: 7px;
+  transform: translateY(-50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  border: none;
+  border-radius: 8px;
+  background: transparent;
+  color: #607769;
+  cursor: pointer;
+}
+
+.boton-ojo:hover {
+  background: #edf4ef;
+  color: #205c43;
+}
+
+.boton-ojo:focus-visible {
+  outline: 2px solid #438566;
+  outline-offset: 2px;
+}
+
+/* VALIDACIONES */
+
+.ayuda-contrasena {
+  margin: -3px 0 1px;
+  color: #758078;
+  font-size: 12px;
+}
+
+.validacion-error,
+.validacion-exito {
+  margin: -3px 0 3px;
+  font-size: 12px;
+  line-height: 1.4;
+}
+
+.validacion-error {
+  color: #a52c25;
+}
+
+.validacion-exito {
+  color: #247348;
+}
+
+/* RECUPERAR CONTRASEÑA */
+
+.recuperar-enlace {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 1px;
+}
+
+.recuperar-enlace button {
+  padding: 4px 0;
+  border: none;
+  background: transparent;
+  color: #205c43;
+  font-size: 13px;
+  font-weight: 650;
+  cursor: pointer;
+}
+
+.recuperar-enlace button:hover,
+.cambio-modo button:hover {
+  text-decoration: underline;
+}
+
+.recuperar-enlace button:disabled,
+.cambio-modo button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* MENSAJES */
+
+.mensaje {
+  padding: 12px;
+  border-radius: 9px;
+  font-size: 13px;
+  line-height: 1.5;
+  overflow-wrap: anywhere;
+}
+
+.mensaje.exito {
+  background: #e6f4e9;
+  color: #205c43;
+}
+
+.mensaje.error {
+  background: #fff0ee;
+  color: #a52c25;
+}
+
+/* CAMBIAR DE FORMULARIO */
+
+.cambio-modo {
+  margin: 22px 0 0;
+  color: #68756d;
+  font-size: 13px;
+  text-align: center;
+  line-height: 1.8;
+}
+
+.cambio-modo button {
+  padding: 0;
+  border: none;
+  background: transparent;
+  color: #205c43;
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+/* PIE DE PÁGINA */
+
+.pie {
+  margin: 22px 0 8px;
+  color: #758078;
+  font-size: 12px;
+  text-align: center;
+}
+
+/* ADAPTACIÓN A PANTALLAS PEQUEÑAS */
+
+@media (max-width: 360px) {
+  .contenedor-auth {
+    padding: 18px 12px;
+  }
+
+  .tarjeta-auth {
+    padding: 16px;
+  }
+
+  .presentacion h1 {
+    font-size: 23px;
+  }
+}
+/* ENCABEZADO DE NEXO SOACHA */
+
+.encabezado-auth {
+  ion-toolbar {
+    --background: #205c43;
+    --color: #ffffff;
+    --border-color: transparent;
+    --min-height: 56px;
+  }
+
+  ion-title {
+    color: #ffffff;
+    font-size: 19px;
+    font-weight: 700;
+    letter-spacing: 0.4px;
+  }
+}
+
+/* ENCABEZADO BLANCO NEXO SOACHA */
+
+.encabezado-auth {
+  box-shadow: 0 2px 10px rgba(25, 65, 43, 0.06);
+
+  ion-toolbar {
+    --background: #ffffff;
+    --color: #205c43;
+    --border-color: #e5ebe6;
+    --min-height: 58px;
+    --padding-start: 0;
+    --padding-end: 0;
+  }
+}
+
+.contenido-encabezado {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  min-height: 58px;
+  padding: 0 28px;
+  box-sizing: border-box;
+}
+
+.nombre-plataforma {
+  color: #205c43;
+  font-size: 21px;
+  font-weight: 800;
+  letter-spacing: 0.2px;
+}
+
+.nombre-plataforma span {
+  color: #39865a;
+}
+
+@media (max-width: 360px) {
+  .contenido-encabezado {
+    padding: 0 18px;
+  }
+
+  .nombre-plataforma {
+    font-size: 19px;
+  }
+}

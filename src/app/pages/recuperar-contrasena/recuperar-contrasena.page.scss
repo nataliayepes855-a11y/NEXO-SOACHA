@@ -1,0 +1,188 @@
+
+.encabezado-recuperacion {
+  box-shadow: 0 2px 10px rgba(25, 65, 43, 0.06);
+
+  ion-toolbar {
+    --background: #ffffff;
+    --color: #205c43;
+    --border-color: #e5ebe6;
+    --min-height: 58px;
+  }
+}
+
+.contenido-encabezado {
+  display: flex;
+  align-items: center;
+  min-height: 58px;
+  padding: 0 28px;
+}
+
+.nombre-plataforma {
+  color: #205c43;
+  font-size: 21px;
+  font-weight: 800;
+}
+
+.nombre-plataforma span {
+  color: #39865a;
+}
+
+.pagina-recuperacion {
+  --background: #f3f7f3;
+}
+
+.contenedor-recuperacion {
+  width: 100%;
+  max-width: 520px;
+  margin: 0 auto;
+  padding: 38px 18px;
+  box-sizing: border-box;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 64px;
+  height: 64px;
+  margin: 0 auto 24px;
+  border-radius: 20px;
+  background: #205c43;
+  color: #ffffff;
+  font-size: 23px;
+  font-weight: 800;
+}
+
+.tarjeta-recuperacion {
+  padding: 26px 22px;
+  background: #ffffff;
+  border: 1px solid #e4ebe5;
+  border-radius: 18px;
+  box-shadow: 0 5px 22px rgb(25 65 43 / 7%);
+}
+
+.tarjeta-recuperacion h2 {
+  margin: 0 0 10px;
+  color: #263b30;
+  font-size: 22px;
+}
+
+.descripcion {
+  margin: 0 0 22px;
+  color: #68756d;
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.tarjeta-recuperacion form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.tarjeta-recuperacion label {
+  color: #33483b;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.campo-contrasena {
+  position: relative;
+}
+
+.campo-contrasena input {
+  width: 100%;
+  min-height: 46px;
+  padding: 12px 80px 12px 12px;
+  box-sizing: border-box;
+  border: 1px solid #d5ded7;
+  border-radius: 10px;
+  background: #ffffff;
+  color: #263b30;
+  font: inherit;
+}
+
+.campo-contrasena input:focus {
+  border-color: #438566;
+  outline: 2px solid #d8eadf;
+}
+
+.boton-ojo {
+  position: absolute;
+  right: 8px;
+  top: 50%;
+  transform: translateY(-50%);
+  padding: 8px;
+  border: none;
+  background: transparent;
+  color: #205c43;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.ayuda {
+  margin: -5px 0 2px;
+  color: #758078;
+  font-size: 12px;
+}
+
+.validacion-error {
+  color: #a52c25;
+  font-size: 12px;
+  margin: 0;
+}
+
+.validacion-exito {
+  color: #247348;
+  font-size: 12px;
+  margin: 0;
+}
+
+.tarjeta-recuperacion ion-button {
+  margin-top: 12px;
+  --background: #205c43;
+  --background-hover: #174832;
+  --border-radius: 10px;
+  --color: #ffffff;
+  min-height: 46px;
+}
+
+.mensaje {
+  padding: 12px;
+  border-radius: 9px;
+  font-size: 13px;
+  line-height: 1.5;
+  overflow-wrap: anywhere;
+}
+
+.mensaje.exito {
+  background: #e6f4e9;
+  color: #205c43;
+}
+
+.mensaje.error {
+  background: #fff0ee;
+  color: #a52c25;
+}
+
+.pie {
+  margin: 22px 0;
+  color: #758078;
+  font-size: 12px;
+  text-align: center;
+}
+
+@media (max-width: 360px) {
+  .contenedor-recuperacion {
+    padding: 24px 12px;
+  }
+
+  .tarjeta-recuperacion {
+    padding: 20px 16px;
+  }
+
+  .contenido-encabezado {
+    padding: 0 18px;
+  }
+}

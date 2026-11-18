@@ -1,0 +1,7 @@
+{
+  "name": "nexo-soacha",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular-standalone"
+}

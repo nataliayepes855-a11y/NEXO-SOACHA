@@ -1,0 +1,477 @@
+
+<ion-header class="encabezado">
+  <ion-toolbar>
+    <ion-title>
+      NEXO <span>SOACHA</span>
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content
+  [fullscreen]="false"
+  class="pagina-inicio">
+
+  <!-- BIENVENIDA -->
+  <section class="bienvenida">
+    <p class="saludo">¡Hola, comunidad!</p>
+    <h2>Conecta con lo que pasa en Soacha</h2>
+    <p>
+      Descubre novedades, comparte ideas y participa
+      en tu comunidad.
+    </p>
+  </section>
+
+  <!-- BUSCADOR -->
+  <section class="busqueda">
+    <ion-searchbar
+      [(ngModel)]="busqueda"
+      placeholder="Buscar publicaciones..."
+      [animated]="true">
+    </ion-searchbar>
+  </section>
+
+  <!-- ENCABEZADO -->
+  <section class="encabezado-publicaciones">
+    <div>
+      <h2>Publicaciones de la comunidad</h2>
+      <p>Entérate de lo que sucede en Soacha.</p>
+    </div>
+
+    <ion-button routerLink="/publicar">
+      <ion-icon name="add-outline" slot="start"></ion-icon>
+      Publicar
+    </ion-button>
+  </section>
+
+  <!-- CARGA -->
+  <div class="estado-carga" *ngIf="cargando">
+    <ion-spinner name="crescent"></ion-spinner>
+    <p>Cargando publicaciones...</p>
+  </div>
+
+  <!-- ERROR -->
+  <div class="mensaje-error" *ngIf="errorCarga">
+    <ion-icon name="alert-circle-outline"></ion-icon>
+    <p>{{ errorCarga }}</p>
+  </div>
+
+  <!-- PUBLICACIONES -->
+  <section class="lista-publicaciones">
+
+    <article
+      class="tarjeta-publicacion"
+      *ngFor="let publicacion of publicacionesFiltradas">
+
+      <!-- AUTOR -->
+      <div class="autor-publicacion">
+
+        <div class="avatar-autor">
+          <img
+            *ngIf="publicacion.fotoPerfil"
+            [src]="publicacion.fotoPerfil"
+            [alt]="'Foto de perfil de ' + publicacion.autor"
+            loading="lazy">
+
+          <span *ngIf="!publicacion.fotoPerfil">
+            {{ publicacion.iniciales }}
+          </span>
+        </div>
+
+        <div class="datos-autor">
+          <h3>{{ publicacion.autor }}</h3>
+          <p>{{ publicacion.tiempo }}</p>
+        </div>
+
+        <!-- MENÚ DE PUBLICACIÓN PROPIA -->
+        <div
+          class="menu-propietario"
+          *ngIf="esPropietario(publicacion.user_id)">
+
+          <ion-button
+            fill="clear"
+            size="small"
+            [disabled]="publicacion.procesando"
+            (click)="publicacion.menuAbierto = !publicacion.menuAbierto"
+            aria-label="Opciones de publicación">
+
+            <ion-icon name="ellipsis-vertical-outline"></ion-icon>
+          </ion-button>
+
+          <div
+            class="opciones-propietario"
+            *ngIf="publicacion.menuAbierto">
+
+            <button
+              type="button"
+              (click)="iniciarEdicionPublicacion(publicacion)">
+              <ion-icon name="create-outline"></ion-icon>
+              Editar
+            </button>
+
+            <button
+              type="button"
+              class="opcion-eliminar"
+              (click)="eliminarPublicacion(publicacion)">
+              <ion-icon name="trash-outline"></ion-icon>
+              Eliminar
+            </button>
+
+          </div>
+        </div>
+
+      </div>
+
+      <!-- CATEGORÍA -->
+      <ion-badge>
+        {{ publicacion.categoria }}
+      </ion-badge>
+
+      <!-- CONTENIDO NORMAL -->
+      <div
+        class="contenido-publicacion"
+        *ngIf="!publicacion.editando">
+
+        <p>{{ publicacion.contenido }}</p>
+      </div>
+
+      <!-- EDITAR PUBLICACIÓN -->
+      <div
+        class="formulario-edicion"
+        *ngIf="publicacion.editando">
+
+        <ion-textarea
+          [(ngModel)]="publicacion.textoEdicion"
+          [autoGrow]="true"
+          [maxlength]="2000"
+          [disabled]="publicacion.procesando"
+          aria-label="Editar contenido de publicación">
+        </ion-textarea>
+
+        <p
+          class="mensaje-error"
+          *ngIf="publicacion.errorEdicion">
+          {{ publicacion.errorEdicion }}
+        </p>
+
+        <div class="acciones-edicion">
+
+          <ion-button
+            fill="outline"
+            [disabled]="publicacion.procesando"
+            (click)="cancelarEdicionPublicacion(publicacion)">
+            Cancelar
+          </ion-button>
+
+          <ion-button
+            [disabled]="
+              publicacion.procesando ||
+              !publicacion.textoEdicion.trim()
+            "
+            (click)="guardarEdicionPublicacion(publicacion)">
+
+            <ion-spinner
+              *ngIf="publicacion.procesando"
+              name="crescent">
+            </ion-spinner>
+
+            <span *ngIf="!publicacion.procesando">
+              Guardar cambios
+            </span>
+
+          </ion-button>
+
+        </div>
+      </div>
+
+      <!-- IMAGEN -->
+      <div
+        class="imagen-publicacion"
+        *ngIf="publicacion.imagen_url">
+
+        <img
+          [src]="publicacion.imagen_url"
+          [alt]="'Fotografía de la publicación de ' + publicacion.autor"
+          loading="lazy">
+      </div>
+
+      <!-- ME GUSTA Y COMENTARIOS -->
+      <div class="acciones-publicacion">
+
+        <ion-button
+          fill="clear"
+          [disabled]="publicacion.procesandoReaccion"
+          (click)="alternarReaccion(publicacion)">
+
+          {{ publicacion.meGusta ? '❤️ Te gusta' : '♡ Me gusta' }}
+          {{ publicacion.reacciones }}
+        </ion-button>
+
+        <ion-button
+          fill="clear"
+          (click)="alternarComentarios(publicacion)">
+
+          <ion-icon
+            name="chatbubble-outline"
+            slot="start">
+          </ion-icon>
+
+          Comentarios ({{ publicacion.comentarios }})
+        </ion-button>
+
+      </div>
+
+      <!-- COMENTARIOS -->
+      <section
+        class="seccion-comentarios"
+        *ngIf="publicacion.mostrarComentarios">
+
+        <h4>Comentarios</h4>
+
+        <div
+          class="estado-carga"
+          *ngIf="publicacion.cargandoComentarios">
+
+          <ion-spinner name="crescent"></ion-spinner>
+          <p>Cargando comentarios...</p>
+        </div>
+
+        <div
+          class="mensaje-error"
+          *ngIf="publicacion.errorComentarios">
+          <p>{{ publicacion.errorComentarios }}</p>
+        </div>
+
+        <!-- COMENTARIO INDIVIDUAL -->
+        <div
+          class="comentario"
+          *ngFor="let comentario of publicacion.listaComentarios">
+
+          <div class="avatar-comentario">
+            <img
+              *ngIf="comentario.fotoPerfil"
+              [src]="comentario.fotoPerfil"
+              [alt]="'Foto de ' + comentario.nombreActual"
+              loading="lazy">
+
+            <span *ngIf="!comentario.fotoPerfil">
+              {{ comentario.iniciales }}
+            </span>
+          </div>
+
+          <div class="contenido-comentario">
+
+            <div class="cabecera-comentario">
+              <strong>{{ comentario.nombreActual }}</strong>
+
+              <!-- MENÚ DE COMENTARIO PROPIO -->
+              <div
+                class="menu-propietario"
+                *ngIf="esPropietario(comentario.user_id)">
+
+                <ion-button
+                  fill="clear"
+                  size="small"
+                  [disabled]="comentario.procesando"
+                  (click)="comentario.menuAbierto = !comentario.menuAbierto"
+                  aria-label="Opciones de comentario">
+
+                  <ion-icon name="ellipsis-vertical-outline"></ion-icon>
+                </ion-button>
+
+                <div
+                  class="opciones-propietario"
+                  *ngIf="comentario.menuAbierto">
+
+                  <button
+                    type="button"
+                    (click)="iniciarEdicionComentario(comentario)">
+                    <ion-icon name="create-outline"></ion-icon>
+                    Editar
+                  </button>
+
+                  <button
+                    type="button"
+                    class="opcion-eliminar"
+                    (click)="eliminarComentario(publicacion, comentario)">
+                    <ion-icon name="trash-outline"></ion-icon>
+                    Eliminar
+                  </button>
+
+                </div>
+              </div>
+            </div>
+
+            <p *ngIf="!comentario.editando">
+              {{ comentario.contenido }}
+            </p>
+
+            <!-- EDITAR COMENTARIO -->
+            <div
+              class="formulario-edicion"
+              *ngIf="comentario.editando">
+
+              <ion-textarea
+                [(ngModel)]="comentario.textoEdicion"
+                [autoGrow]="true"
+                [maxlength]="1000"
+                [disabled]="comentario.procesando"
+                aria-label="Editar comentario">
+              </ion-textarea>
+
+              <div class="acciones-edicion">
+                <ion-button
+                  fill="outline"
+                  size="small"
+                  [disabled]="comentario.procesando"
+                  (click)="cancelarEdicionComentario(comentario)">
+                  Cancelar
+                </ion-button>
+
+                <ion-button
+                  size="small"
+                  [disabled]="
+                    comentario.procesando ||
+                    !comentario.textoEdicion.trim()
+                  "
+                  (click)="guardarEdicionComentario(publicacion, comentario)">
+
+                  Guardar
+                </ion-button>
+              </div>
+            </div>
+
+            <small>
+              {{ comentario.created_at | date:'dd/MM/yyyy, h:mm a' }}
+            </small>
+
+          </div>
+        </div>
+
+        <!-- SIN COMENTARIOS -->
+        <p
+          class="sin-comentarios"
+          *ngIf="
+            !publicacion.cargandoComentarios &&
+            !publicacion.errorComentarios &&
+            publicacion.listaComentarios.length === 0
+          ">
+
+          Todavía no hay comentarios.
+          ¡Sé la primera persona en comentar!
+        </p>
+
+        <!-- NUEVO COMENTARIO -->
+        <div class="nuevo-comentario">
+
+          <ion-textarea
+            [(ngModel)]="publicacion.nuevoComentario"
+            placeholder="Escribe un comentario..."
+            [autoGrow]="true"
+            rows="1">
+          </ion-textarea>
+
+          <ion-button
+            type="button"
+            (click)="agregarComentario(publicacion)"
+            [disabled]="
+              publicacion.enviandoComentario ||
+              !publicacion.nuevoComentario.trim()
+            ">
+
+            <ion-spinner
+              *ngIf="publicacion.enviandoComentario"
+              name="crescent">
+            </ion-spinner>
+
+            <ion-icon
+              *ngIf="!publicacion.enviandoComentario"
+              name="send-outline">
+            </ion-icon>
+
+            <span *ngIf="publicacion.enviandoComentario">
+              Enviando...
+            </span>
+
+            <span *ngIf="!publicacion.enviandoComentario">
+              Enviar comentario
+            </span>
+
+          </ion-button>
+        </div>
+
+      </section>
+    </article>
+  </section>
+
+  <!-- SIN PUBLICACIONES -->
+  <div
+    class="sin-publicaciones"
+    *ngIf="
+      !cargando &&
+      !errorCarga &&
+      publicacionesFiltradas.length === 0
+    ">
+
+    <ion-icon name="newspaper-outline"></ion-icon>
+    <h3>No hay publicaciones para mostrar</h3>
+
+    <p>
+      Intenta con otra búsqueda o crea una publicación.
+    </p>
+
+    <ion-button routerLink="/publicar">
+      Crear publicación
+    </ion-button>
+  </div>
+
+</ion-content>
+
+<!-- NAVEGACIÓN INFERIOR -->
+<ion-footer class="navegacion-inferior">
+  <ion-toolbar>
+    <div class="menu-inferior">
+
+      <a
+        routerLink="/home"
+        routerLinkActive="activo"
+        [routerLinkActiveOptions]="{ exact: true }">
+
+        <ion-icon name="home-outline"></ion-icon>
+        <span>Inicio</span>
+      </a>
+
+      <a
+        routerLink="/explorar"
+        routerLinkActive="activo">
+
+        <ion-icon name="compass-outline"></ion-icon>
+        <span>Explorar</span>
+      </a>
+
+      <a
+        routerLink="/publicar"
+        routerLinkActive="activo">
+
+        <ion-icon name="add-circle-outline"></ion-icon>
+        <span>Publicar</span>
+      </a>
+
+      <a
+        routerLink="/chatbot"
+        routerLinkActive="activo">
+
+        <ion-icon name="chatbubbles-outline"></ion-icon>
+        <span>Chatbot</span>
+      </a>
+
+      <a
+        routerLink="/perfil"
+        routerLinkActive="activo">
+
+        <ion-icon name="person-circle-outline"></ion-icon>
+        <span>Perfil</span>
+      </a>
+
+    </div>
+  </ion-toolbar>
+</ion-footer>

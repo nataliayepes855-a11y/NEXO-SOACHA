@@ -1,0 +1,311 @@
+
+<!-- =========================================
+     NEXO SOACHA - EXPLORAR
+     ========================================= -->
+
+<ion-header class="encabezado">
+  <ion-toolbar>
+    <ion-title>
+      NEXO <span>SOACHA</span>
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content
+  [fullscreen]="false"
+  class="pagina-explorar">
+
+  <!-- PRESENTACIÓN -->
+
+  <section class="bienvenida-explorar">
+
+    <div class="titulo-explorar">
+
+      <ion-icon name="compass-outline"></ion-icon>
+
+      <h1>Explorar Soacha</h1>
+
+    </div>
+
+    <p>
+      Descubre actividades, iniciativas, emprendimientos
+      y novedades de nuestra comunidad.
+    </p>
+
+  </section>
+
+  <!-- BUSCADOR -->
+
+  <section class="seccion-busqueda">
+
+    <h2>¿Qué quieres descubrir?</h2>
+
+    <ion-searchbar
+      [(ngModel)]="busqueda"
+      placeholder="Buscar publicaciones, temas o autores..."
+      [debounce]="200"
+      [animated]="true">
+    </ion-searchbar>
+
+  </section>
+
+  <!-- CATEGORÍAS -->
+
+  <section class="seccion-categorias">
+
+    <div class="encabezado-seccion">
+
+      <div>
+        <h2>Explora por categorías</h2>
+        <p>Selecciona los temas que más te interesen.</p>
+      </div>
+
+      <ion-icon name="filter-outline"></ion-icon>
+
+    </div>
+
+    <div class="lista-categorias">
+
+      <button
+        type="button"
+        class="boton-categoria"
+        *ngFor="let categoria of categorias"
+        [class.activa]="categoriaSeleccionada === categoria"
+        [attr.aria-pressed]="categoriaSeleccionada === categoria"
+        (click)="seleccionarCategoria(categoria)">
+
+        {{ categoria }}
+
+      </button>
+
+    </div>
+
+  </section>
+
+  <!-- PUBLICACIONES -->
+
+  <section class="seccion-resultados">
+
+    <div class="encabezado-resultados">
+
+      <div>
+
+        <h2>Descubre publicaciones</h2>
+
+        <p>
+          {{ publicacionesFiltradas.length }}
+          {{
+            publicacionesFiltradas.length === 1
+              ? 'publicación encontrada'
+              : 'publicaciones encontradas'
+          }}
+        </p>
+
+      </div>
+
+      <ion-button
+        fill="outline"
+        class="boton-actualizar"
+        (click)="cargarPublicaciones()"
+        [disabled]="cargando">
+
+        <ion-icon
+          name="refresh-outline"
+          slot="start">
+        </ion-icon>
+
+        Actualizar
+
+      </ion-button>
+
+    </div>
+
+    <!-- CARGANDO -->
+
+    <div
+      class="estado-carga"
+      *ngIf="cargando">
+
+      <ion-spinner name="crescent"></ion-spinner>
+
+      <p>Cargando publicaciones de la comunidad...</p>
+
+    </div>
+
+    <!-- ERROR -->
+
+    <div
+      class="mensaje-error"
+      *ngIf="errorCarga && !cargando">
+
+      <ion-icon name="alert-circle-outline"></ion-icon>
+
+      <p>{{ errorCarga }}</p>
+
+      <ion-button
+        fill="clear"
+        (click)="cargarPublicaciones()">
+
+        Reintentar
+
+      </ion-button>
+
+    </div>
+
+    <!-- LISTA DE PUBLICACIONES -->
+
+    <div
+      class="lista-publicaciones"
+      *ngIf="!cargando && !errorCarga">
+
+      <article
+        class="tarjeta-publicacion"
+        *ngFor="let publicacion of publicacionesFiltradas">
+
+        <!-- AUTOR Y FOTOGRAFÍA -->
+
+        <div class="autor-publicacion">
+
+          <div class="avatar-autor">
+
+            <img
+              *ngIf="publicacion.fotoPerfil; else inicialesAutor"
+              [src]="publicacion.fotoPerfil"
+              [alt]="'Foto de perfil de ' + publicacion.autor"
+              loading="lazy">
+
+            <ng-template #inicialesAutor>
+              <span>
+                {{ publicacion.iniciales }}
+              </span>
+            </ng-template>
+
+          </div>
+
+          <div class="informacion-autor">
+
+            <h3>{{ publicacion.autor }}</h3>
+
+            <p>{{ publicacion.fecha }}</p>
+
+          </div>
+
+        </div>
+
+        <!-- CATEGORÍA -->
+
+        <ion-badge class="categoria-publicacion">
+          {{ publicacion.categoria }}
+        </ion-badge>
+
+        <!-- CONTENIDO -->
+
+        <p class="texto-publicacion">
+          {{ publicacion.contenido }}
+        </p>
+
+        <!-- IMAGEN DE PUBLICACIÓN -->
+
+        <div
+          class="imagen-publicacion"
+          *ngIf="publicacion.imagen_url">
+
+          <img
+            [src]="publicacion.imagen_url"
+            [alt]="'Fotografía de la publicación de ' + publicacion.autor"
+            loading="lazy">
+
+        </div>
+
+      </article>
+
+    </div>
+
+    <!-- SIN RESULTADOS -->
+
+    <div
+      class="sin-resultados"
+      *ngIf="
+        !cargando &&
+        !errorCarga &&
+        publicacionesFiltradas.length === 0
+      ">
+
+      <ion-icon name="search-outline"></ion-icon>
+
+      <h3>No encontramos publicaciones</h3>
+
+      <p>
+        Prueba con otra palabra o selecciona
+        una categoría diferente.
+      </p>
+
+      <ion-button (click)="limpiarFiltros()">
+        Limpiar filtros
+      </ion-button>
+
+    </div>
+
+  </section>
+
+</ion-content>
+
+<!-- NAVEGACIÓN INFERIOR -->
+
+<ion-footer class="navegacion-inferior">
+
+  <ion-toolbar>
+
+    <div class="menu-inferior">
+
+      <a
+        routerLink="/home"
+        routerLinkActive="activo"
+        [routerLinkActiveOptions]="{ exact: true }">
+
+        <ion-icon name="home-outline"></ion-icon>
+        <span>Inicio</span>
+
+      </a>
+
+      <a
+        routerLink="/explorar"
+        routerLinkActive="activo">
+
+        <ion-icon name="compass-outline"></ion-icon>
+        <span>Explorar</span>
+
+      </a>
+
+      <a
+        routerLink="/publicar"
+        routerLinkActive="activo">
+
+        <ion-icon name="add-circle-outline"></ion-icon>
+        <span>Publicar</span>
+
+      </a>
+
+      <a
+        routerLink="/chatbot"
+        routerLinkActive="activo">
+
+        <ion-icon name="chatbubbles-outline"></ion-icon>
+        <span>Chatbot</span>
+
+      </a>
+
+      <a
+        routerLink="/perfil"
+        routerLinkActive="activo">
+
+        <ion-icon name="person-circle-outline"></ion-icon>
+        <span>Perfil</span>
+
+      </a>
+
+    </div>
+
+  </ion-toolbar>
+
+</ion-footer>

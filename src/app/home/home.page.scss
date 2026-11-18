@@ -1,0 +1,956 @@
+
+/* =========================================
+   NEXO SOACHA - INICIO COMPLETO
+   ========================================= */
+
+:host {
+  display: block;
+  height: 100%;
+
+  --verde-principal: #245c3a;
+  --verde-secundario: #39865a;
+  --verde-claro: #eaf3ec;
+  --fondo: #f4f7f4;
+  --texto: #333333;
+  --texto-secundario: #777777;
+}
+
+/* =========================================
+   FONDO GENERAL
+   ========================================= */
+
+.pagina-inicio {
+  --background: var(--fondo);
+  color: var(--texto);
+}
+
+ion-content.pagina-inicio::part(scroll) {
+  padding: 20px 16px 90px;
+  box-sizing: border-box;
+}
+
+/* =========================================
+   ENCABEZADO
+   ========================================= */
+
+.encabezado {
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+.encabezado ion-toolbar {
+  --background: #ffffff;
+  --color: var(--verde-principal);
+  --min-height: 62px;
+
+  padding-inline: 12px;
+}
+
+.encabezado ion-title {
+  font-size: 21px;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+}
+
+.encabezado ion-title span {
+  color: var(--verde-secundario);
+}
+
+/* =========================================
+   BIENVENIDA
+   ========================================= */
+
+.bienvenida {
+  max-width: 850px;
+  margin: 5px auto 22px;
+  padding: 28px 24px;
+
+  border-radius: 18px;
+
+  background: linear-gradient(
+    135deg,
+    var(--verde-principal),
+    var(--verde-secundario)
+  );
+
+  color: #ffffff;
+
+  box-shadow: 0 4px 12px rgba(
+    0, 0, 0, 0.1
+  );
+}
+
+.bienvenida .saludo {
+  margin: 0 0 10px;
+  color: #ffffff;
+  font-size: 25px;
+  font-weight: 750;
+}
+
+.bienvenida h2 {
+  margin: 0 0 12px;
+  color: #ffffff;
+  font-size: 21px;
+  font-weight: 700;
+}
+
+.bienvenida p {
+  margin: 0;
+  color: #f1f8f2;
+  font-size: 15px;
+  line-height: 1.65;
+}
+
+/* =========================================
+   BUSCADOR
+   ========================================= */
+
+.busqueda {
+  width: 100%;
+  max-width: 850px;
+  margin: 0 auto 24px;
+}
+
+.busqueda ion-searchbar {
+  --background: #ffffff;
+  --border-radius: 12px;
+  --box-shadow: 0 2px 8px rgba(
+    0, 0, 0, 0.06
+  );
+
+  --placeholder-color: #777777;
+  --icon-color: var(--verde-principal);
+  --color: var(--texto);
+
+  padding: 0;
+}
+
+/* =========================================
+   ENCABEZADO DE PUBLICACIONES
+   ========================================= */
+
+.encabezado-publicaciones {
+  width: 100%;
+  max-width: 850px;
+
+  margin: 0 auto 16px;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.encabezado-publicaciones h2 {
+  margin: 0;
+  color: var(--verde-principal);
+  font-size: 20px;
+  font-weight: 750;
+}
+
+.encabezado-publicaciones p {
+  margin: 6px 0 0;
+  color: var(--texto-secundario);
+  font-size: 13px;
+}
+
+/* BOTÓN PUBLICAR */
+
+.encabezado-publicaciones ion-button {
+  --background: #2e7d32;
+  --background-hover: #1b4d2e;
+  --background-activated: #1b4d2e;
+  --color: #ffffff;
+  --border-radius: 10px;
+
+  --box-shadow: 0 3px 8px rgba(
+    27, 77, 46, 0.18
+  );
+
+  height: 40px;
+  margin: 0;
+
+  font-size: 13px;
+  font-weight: 700;
+  text-transform: none;
+}
+
+/* =========================================
+   LISTA DE PUBLICACIONES
+   ========================================= */
+
+.lista-publicaciones {
+  width: 100%;
+  max-width: 850px;
+  margin: 0 auto;
+}
+
+/* =========================================
+   TARJETAS DE PUBLICACIONES
+   ========================================= */
+
+.tarjeta-publicacion {
+  display: block;
+
+  width: 100%;
+  margin: 0 auto 20px;
+  padding: 18px;
+
+  border-radius: 16px;
+  background: #ffffff;
+
+  box-shadow: 0 3px 12px rgba(
+    0, 0, 0, 0.07
+  );
+
+  overflow: hidden;
+}
+
+/* =========================================
+   AUTOR Y FOTO DE PERFIL
+   ========================================= */
+
+.autor-publicacion {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+
+  min-width: 0;
+}
+
+.avatar-autor {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+
+  width: 43px;
+  height: 43px;
+  min-width: 43px;
+
+  border: 2px solid #dcebdd;
+  border-radius: 50%;
+
+  overflow: hidden;
+
+  background: var(--verde-claro);
+  color: var(--verde-principal);
+
+  font-size: 15px;
+  font-weight: 750;
+}
+
+.avatar-autor img {
+  display: block;
+
+  width: 100%;
+  height: 100%;
+
+  border-radius: 50%;
+  object-fit: cover;
+  object-position: center;
+}
+
+.avatar-autor span {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 100%;
+  height: 100%;
+
+  font-weight: 750;
+  text-transform: uppercase;
+}
+
+.datos-autor {
+  flex: 1;
+  min-width: 0;
+}
+
+.datos-autor h3 {
+  margin: 0;
+
+  color: var(--verde-principal);
+  font-size: 15px;
+  font-weight: 700;
+
+  overflow-wrap: anywhere;
+}
+
+.datos-autor p {
+  margin: 4px 0 0;
+
+  color: var(--texto-secundario);
+  font-size: 12px;
+}
+
+/* =========================================
+   CATEGORÍA
+   ========================================= */
+
+.tarjeta-publicacion ion-badge {
+  display: inline-block;
+
+  margin-top: 13px;
+  padding: 6px 10px;
+
+  border-radius: 8px;
+
+  --background: var(--verde-claro);
+  --color: var(--verde-principal);
+
+  font-size: 11px;
+  font-weight: 650;
+}
+
+/* =========================================
+   CONTENIDO
+   ========================================= */
+
+.contenido-publicacion {
+  margin: 12px 0 16px;
+
+  color: var(--texto);
+
+  font-size: 15px;
+  line-height: 1.7;
+
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.contenido-publicacion p {
+  margin: 0;
+}
+
+/* =========================================
+   IMAGEN DE LA PUBLICACIÓN
+   ========================================= */
+
+.imagen-publicacion {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 100%;
+  margin: 12px 0 18px;
+
+  border: 1px solid #e4ece4;
+  border-radius: 12px;
+
+  overflow: hidden;
+
+  background: #f1f6f1;
+}
+
+.imagen-publicacion img {
+  display: block;
+
+  width: 100%;
+  max-height: 520px;
+  height: auto;
+
+  object-fit: contain;
+}
+
+/* =========================================
+   ME GUSTA Y COMENTARIOS
+   ========================================= */
+
+.acciones-publicacion {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+
+  gap: 8px;
+
+  border-top: 1px solid #eeeeee;
+
+  padding-top: 10px;
+  margin-top: 12px;
+}
+
+.acciones-publicacion ion-button {
+  --color: var(--verde-principal);
+  --border-radius: 9px;
+
+  font-size: 13px;
+  text-transform: none;
+
+  margin: 0;
+}
+
+.acciones-publicacion ion-button::part(native) {
+  padding-inline: 8px;
+}
+
+/* =========================================
+   ESTADOS DE CARGA Y ERROR
+   ========================================= */
+
+.estado-carga {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  gap: 10px;
+
+  max-width: 850px;
+  margin: 24px auto;
+  padding: 22px;
+
+  color: var(--verde-principal);
+  text-align: center;
+}
+
+.estado-carga ion-spinner {
+  color: var(--verde-secundario);
+}
+
+.mensaje-error {
+  max-width: 850px;
+  margin: 16px auto;
+  padding: 13px 15px;
+
+  border: 1px solid #f1c9c6;
+  border-radius: 10px;
+
+  background: #fff5f4;
+  color: #b42318;
+
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+/* =========================================
+   SIN PUBLICACIONES
+   ========================================= */
+
+.sin-publicaciones {
+  max-width: 850px;
+
+  margin: 20px auto;
+  padding: 30px 20px;
+
+  border: 1px solid #e5ebe5;
+  border-radius: 15px;
+
+  background: #ffffff;
+  color: var(--texto-secundario);
+
+  text-align: center;
+}
+
+.sin-publicaciones ion-icon {
+  font-size: 35px;
+  color: var(--verde-secundario);
+  margin-bottom: 10px;
+}
+
+.sin-publicaciones h3 {
+  margin: 0 0 10px;
+
+  color: var(--verde-principal);
+  font-size: 18px;
+}
+
+.sin-publicaciones p {
+  margin: 0 0 16px;
+
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+/* =========================================
+   SECCIÓN DE COMENTARIOS
+   ========================================= */
+
+.seccion-comentarios {
+  margin-top: 16px;
+  padding: 15px;
+
+  border-radius: 12px;
+  background: #f5f8f5;
+}
+
+.seccion-comentarios h4 {
+  margin: 0 0 14px;
+
+  color: var(--verde-principal);
+  font-size: 16px;
+  font-weight: 700;
+}
+
+/* =========================================
+   COMENTARIOS INDIVIDUALES
+   ========================================= */
+
+.comentario {
+  display: flex;
+  align-items: flex-start;
+
+  gap: 10px;
+
+  margin-bottom: 10px;
+  padding: 12px;
+
+  border: 1px solid #e1e9e1;
+  border-radius: 11px;
+
+  background: #ffffff;
+}
+
+/* FOTO DE PERFIL DEL COMENTARIO */
+
+.avatar-comentario {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+
+  width: 34px;
+  height: 34px;
+  min-width: 34px;
+
+  border: 1px solid #dcebdd;
+  border-radius: 50%;
+
+  overflow: hidden;
+
+  background: var(--verde-claro);
+  color: var(--verde-principal);
+
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.avatar-comentario img {
+  display: block;
+
+  width: 100%;
+  height: 100%;
+
+  border-radius: 50%;
+  object-fit: cover;
+  object-position: center;
+}
+
+.avatar-comentario span {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 100%;
+  height: 100%;
+
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+/* TEXTO DEL COMENTARIO */
+
+.contenido-comentario {
+  flex: 1;
+  min-width: 0;
+}
+
+.contenido-comentario strong {
+  display: block;
+
+  margin-bottom: 4px;
+
+  color: var(--verde-principal);
+  font-size: 13px;
+
+  overflow-wrap: anywhere;
+}
+
+.contenido-comentario p {
+  margin: 0;
+
+  color: var(--texto);
+
+  font-size: 14px;
+  line-height: 1.5;
+
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.contenido-comentario small {
+  display: block;
+
+  margin-top: 6px;
+
+  color: #888888;
+  font-size: 11px;
+}
+
+/* =========================================
+   SIN COMENTARIOS
+   ========================================= */
+
+.sin-comentarios {
+  margin: 0 0 12px;
+  padding: 12px;
+
+  color: var(--texto-secundario);
+
+  font-size: 13px;
+  text-align: center;
+}
+
+/* =========================================
+   NUEVO COMENTARIO
+   ========================================= */
+
+.nuevo-comentario {
+  display: flex;
+  align-items: flex-end;
+
+  gap: 8px;
+  margin-top: 14px;
+}
+
+.nuevo-comentario ion-textarea {
+  flex: 1;
+  min-width: 0;
+
+  --background: #ffffff;
+  --color: var(--texto);
+  --placeholder-color: #888888;
+
+  --padding-top: 11px;
+  --padding-bottom: 11px;
+  --padding-start: 12px;
+  --padding-end: 12px;
+
+  border: 1px solid #d5dfd5;
+  border-radius: 11px;
+
+  font-size: 14px;
+}
+
+.nuevo-comentario ion-textarea.ion-focused {
+  border-color: var(--verde-secundario);
+}
+
+.nuevo-comentario ion-button {
+  flex-shrink: 0;
+  min-height: 42px;
+
+  --background: var(--verde-principal);
+  --background-hover: var(--verde-secundario);
+
+  --color: #ffffff;
+  --border-radius: 10px;
+
+  margin: 0;
+}
+
+/* =========================================
+   NAVEGACIÓN INFERIOR
+   ========================================= */
+
+.navegacion-inferior {
+  position: fixed;
+
+  bottom: 0;
+  left: 0;
+  right: 0;
+
+  width: 100%;
+  max-width: none;
+
+  z-index: 100;
+
+  margin: 0;
+  padding: 0;
+
+  border: none;
+  border-radius: 0;
+
+  background: #ffffff;
+  box-shadow: none;
+
+  ion-toolbar {
+    --background: #ffffff;
+    --padding-start: 0;
+    --padding-end: 0;
+    --min-height: 56px;
+
+    border-top: 1px solid #d4ebd0;
+
+    box-shadow: 0 -4px 16px rgba(
+      27, 77, 46, 0.08
+    );
+  }
+
+  .menu-inferior {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+
+    width: 100%;
+    gap: 0;
+
+    padding: 6px 0;
+
+    a {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+
+      gap: 3px;
+      min-width: 0;
+
+      padding: 0;
+      border-radius: 0;
+
+      font-size: 0.72rem;
+      font-weight: 400;
+
+      color: #6b8e72;
+      text-decoration: none;
+      text-align: center;
+
+      flex: 1;
+
+      transition: all 0.2s ease;
+
+      ion-icon {
+        font-size: 24px;
+      }
+
+      span {
+        line-height: 1;
+      }
+
+      &.activo {
+        background: transparent;
+        color: #2e7d32;
+        font-weight: 700;
+      }
+
+      &:hover {
+        color: #1b4d2e;
+      }
+    }
+  }
+}
+
+/* =========================================
+   DISEÑO RESPONSIVO
+   ========================================= */
+
+@media (max-width: 480px) {
+
+  ion-content.pagina-inicio::part(scroll) {
+    padding: 14px 12px 90px;
+  }
+
+  .bienvenida {
+    padding: 23px 18px;
+    border-radius: 15px;
+  }
+
+  .bienvenida .saludo {
+    font-size: 22px;
+  }
+
+  .bienvenida h2 {
+    font-size: 19px;
+  }
+
+  .bienvenida p {
+    font-size: 14px;
+  }
+
+  .encabezado-publicaciones h2 {
+    font-size: 18px;
+  }
+
+  .tarjeta-publicacion {
+    padding: 15px 14px;
+  }
+
+  .avatar-autor {
+    width: 40px;
+    height: 40px;
+    min-width: 40px;
+  }
+
+  .avatar-comentario {
+    width: 32px;
+    height: 32px;
+    min-width: 32px;
+  }
+
+  .datos-autor h3 {
+    font-size: 14px;
+  }
+
+  .imagen-publicacion {
+    margin: 10px 0 15px;
+    border-radius: 10px;
+  }
+
+  .imagen-publicacion img {
+    max-height: 380px;
+  }
+
+  .seccion-comentarios {
+    padding: 11px;
+  }
+
+  .nuevo-comentario {
+    gap: 6px;
+  }
+
+  .nuevo-comentario ion-button {
+    min-width: 42px;
+  }
+
+  .navegacion-inferior .menu-inferior a {
+    font-size: 0.72rem;
+    padding: 0;
+  }
+
+  .navegacion-inferior .menu-inferior a ion-icon {
+    font-size: 24px;
+  }
+}
+
+/* =========================================
+   EDICIÓN Y ELIMINACIÓN DE CONTENIDO
+   ========================================= */
+
+.menu-propietario {
+  position: relative;
+  flex-shrink: 0;
+  margin-left: auto;
+}
+
+.menu-propietario ion-button {
+  --color: #245c3a;
+  --border-radius: 9px;
+  margin: 0;
+}
+
+.opciones-propietario {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  z-index: 20;
+
+  min-width: 150px;
+  padding: 5px;
+
+  border: 1px solid #dce8dd;
+  border-radius: 11px;
+
+  background: #ffffff;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.12);
+}
+
+.opciones-propietario button {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+
+  width: 100%;
+  padding: 11px;
+
+  border: 0;
+  border-radius: 7px;
+
+  background: transparent;
+  color: #245c3a;
+
+  font: inherit;
+  font-size: 13px;
+  text-align: left;
+  cursor: pointer;
+}
+
+.opciones-propietario button:hover {
+  background: #eaf3ec;
+}
+
+.opciones-propietario .opcion-eliminar {
+  color: #b42318;
+}
+
+.opciones-propietario .opcion-eliminar:hover {
+  background: #fff1f0;
+}
+
+.formulario-edicion {
+  margin: 13px 0;
+}
+
+.formulario-edicion ion-textarea {
+  --background: #ffffff;
+  --color: #333333;
+  --padding-start: 12px;
+  --padding-end: 12px;
+  --padding-top: 10px;
+  --padding-bottom: 10px;
+
+  border: 1px solid #cbdccd;
+  border-radius: 10px;
+
+  font-size: 14px;
+}
+
+.acciones-edicion {
+  display: flex;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.acciones-edicion ion-button {
+  --border-radius: 9px;
+  --background: #2e7d32;
+  --color: #ffffff;
+
+  margin: 0;
+  text-transform: none;
+  font-size: 13px;
+}
+
+.acciones-edicion ion-button[fill="outline"] {
+  --background: transparent;
+  --color: #245c3a;
+  --border-color: #b9d6be;
+}
+
+.cabecera-comentario {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.cabecera-comentario strong {
+  margin-bottom: 0;
+}
+
+@media (max-width: 480px) {
+  .opciones-propietario {
+    min-width: 135px;
+  }
+
+  .opciones-propietario button {
+    padding: 10px;
+  }
+
+  .acciones-edicion {
+    gap: 6px;
+  }
+}

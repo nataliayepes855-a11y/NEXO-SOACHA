@@ -1,0 +1,250 @@
+
+<!-- ENCABEZADO -->
+<ion-header class="encabezado">
+  <ion-toolbar>
+    <div class="encabezado-contenido">
+
+      <div class="identidad-asistente">
+        <div class="icono-asistente">
+          <ion-icon name="sparkles-outline"></ion-icon>
+        </div>
+
+        <div class="informacion-asistente">
+          <h1>NEXO <span>IA</span></h1>
+          <p>Asistente virtual de NEXO SOACHA</p>
+        </div>
+      </div>
+
+      <button
+        type="button"
+        class="btn-nueva-conversacion"
+        (click)="nuevaConversacion()"
+        [disabled]="cargandoRespuesta"
+        aria-label="Iniciar nueva conversación"
+      >
+        <ion-icon name="refresh-outline"></ion-icon>
+        <span>Nueva conversación</span>
+      </button>
+
+    </div>
+  </ion-toolbar>
+</ion-header>
+
+<!-- CONTENIDO -->
+<ion-content [fullscreen]="true" class="pagina-chatbot">
+
+  <div class="contenedor-chat">
+
+    <!-- PRESENTACIÓN -->
+    <section
+      class="presentacion-chat"
+      *ngIf="mensajes.length === 1"
+    >
+      <div class="presentacion-icono">
+        <ion-icon name="sparkles-outline"></ion-icon>
+      </div>
+
+      <h2>Bienvenido a NEXO IA</h2>
+
+      <p>
+        Tu asistente inteligente para conocer NEXO SOACHA,
+        resolver preguntas y descubrir más sobre nuestra comunidad.
+      </p>
+
+      <div class="etiqueta-ia">
+        <span class="punto-estado"></span>
+        Impulsado por inteligencia artificial
+      </div>
+    </section>
+
+    <!-- PREGUNTAS SUGERIDAS -->
+    <section
+      class="seccion-sugerencias"
+      *ngIf="mensajes.length === 1"
+    >
+
+      <div class="titulo-sugerencias">
+        <ion-icon name="chatbubble-ellipses-outline"></ion-icon>
+        <h3>¿Por dónde quieres comenzar?</h3>
+      </div>
+
+      <div class="cuadricula-sugerencias">
+
+        <button
+          type="button"
+          class="tarjeta-sugerencia"
+          *ngFor="let pregunta of preguntasSugeridas"
+          (click)="seleccionarPregunta(pregunta)"
+          [disabled]="cargandoRespuesta"
+        >
+          <div class="tarjeta-icono">
+            <ion-icon name="sparkles-outline"></ion-icon>
+          </div>
+
+          <span>{{ pregunta }}</span>
+
+          <ion-icon
+            name="send-outline"
+            class="flecha-sugerencia"
+          ></ion-icon>
+        </button>
+
+      </div>
+    </section>
+
+    <!-- HISTORIAL DE MENSAJES -->
+    <section
+      class="historial-mensajes"
+      aria-label="Conversación con NEXO IA"
+      aria-live="polite"
+    >
+
+      <div
+        *ngFor="let msg of mensajes"
+        class="mensaje-item"
+        [ngClass]="{
+          'bot': msg.remitente === 'bot',
+          'usuario': msg.remitente === 'usuario'
+        }"
+      >
+
+        <div
+          class="avatar-bot"
+          *ngIf="msg.remitente === 'bot'"
+        >
+          <ion-icon name="sparkles-outline"></ion-icon>
+        </div>
+
+        <div class="burbuja-mensaje">
+
+          <span
+            class="nombre-remitente"
+            *ngIf="msg.remitente === 'bot'"
+          >
+            NEXO IA
+          </span>
+
+          <!-- RESPUESTA CON FORMATO MARKDOWN -->
+          <div
+            class="contenido-mensaje"
+            [innerHTML]="formatearMensaje(msg.texto)"
+          ></div>
+
+          <span class="hora-mensaje">
+            {{ msg.tiempo }}
+          </span>
+
+        </div>
+      </div>
+
+      <!-- INDICADOR DE CARGA -->
+      <div
+        class="mensaje-item bot"
+        *ngIf="cargandoRespuesta"
+      >
+
+        <div class="avatar-bot">
+          <ion-icon name="sparkles-outline"></ion-icon>
+        </div>
+
+        <div class="burbuja-mensaje escribiendo">
+
+          <span class="nombre-remitente">
+            NEXO IA
+          </span>
+
+          <div class="estado-escribiendo">
+            <ion-spinner
+              name="dots"
+              color="success"
+            ></ion-spinner>
+
+            <span>Preparando tu respuesta...</span>
+          </div>
+
+        </div>
+      </div>
+
+    </section>
+  </div>
+</ion-content>
+
+<!-- BARRA DE ESCRITURA -->
+<div class="barra-escritura">
+
+  <div class="zona-escritura">
+
+    <div
+      class="aviso-error"
+      *ngIf="errorChat"
+      role="alert"
+    >
+      {{ errorChat }}
+    </div>
+
+    <div class="input-contenedor">
+
+      <input
+        type="text"
+        [(ngModel)]="mensajeUsuario"
+        (keyup.enter)="enviarMensaje()"
+        [disabled]="cargandoRespuesta"
+        maxlength="2000"
+        placeholder="Pregúntale algo a NEXO IA..."
+        aria-label="Escribe tu pregunta para NEXO IA"
+      />
+
+      <button
+        type="button"
+        class="btn-enviar"
+        (click)="enviarMensaje()"
+        [disabled]="cargandoRespuesta || !mensajeUsuario.trim()"
+        aria-label="Enviar mensaje"
+      >
+        <ion-icon name="send-outline"></ion-icon>
+      </button>
+
+    </div>
+
+    <p class="nota-asistente">
+      NEXO IA puede cometer errores.
+      Verifica la información importante.
+    </p>
+
+  </div>
+</div>
+
+<!-- NAVEGACIÓN INFERIOR -->
+<ion-footer class="navegacion-inferior">
+  <ion-toolbar>
+
+    <div class="menu-inferior">
+
+      <a routerLink="/home" routerLinkActive="activo">
+        <ion-icon name="home-outline"></ion-icon>
+        <span>Inicio</span>
+      </a>
+
+      <a routerLink="/explorar" routerLinkActive="activo">
+        <ion-icon name="compass-outline"></ion-icon>
+        <span>Explorar</span>
+      </a>
+
+      <a routerLink="/publicar" routerLinkActive="activo">
+        <ion-icon name="add-circle-outline"></ion-icon>
+        <span>Publicar</span>
+      </a>
+
+      <a routerLink="/chatbot" routerLinkActive="activo">
+        <ion-icon name="chatbubbles-outline"></ion-icon>
+        <span>Chatbot</span>
+      </a>
+
+      <a routerLink="/perfil" routerLinkActive="activo">
+        <ion-icon name="person-circle-outline"></ion-icon>
+        <span>Perfil</span>
+      </a>
+
+    </div>
+  </ion-toolbar>
+</ion-footer>

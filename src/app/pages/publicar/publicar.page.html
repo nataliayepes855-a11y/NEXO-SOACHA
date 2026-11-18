@@ -1,0 +1,285 @@
+
+<ion-header class="encabezado">
+  <ion-toolbar>
+    <ion-title>
+      Publicar en <span>Nexo Soacha</span>
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content
+  [fullscreen]="true"
+  class="pagina-publicar"
+>
+  <div class="contenedor-principal">
+
+    <div class="tarjeta-formulario">
+
+      <div class="cabecera-seccion">
+        <h2>Comparte con tu comunidad</h2>
+
+        <p>
+          Publica información, actividades,
+          iniciativas o noticias de interés
+          para Soacha.
+        </p>
+      </div>
+
+      <!-- CATEGORÍA -->
+      <div class="grupo-campo">
+
+        <label for="categoria">
+          Categoría de la publicación
+        </label>
+
+        <div class="select-wrapper">
+
+          <select
+            id="categoria"
+            [(ngModel)]="categoria"
+            class="input-estilizado"
+            [disabled]="guardando"
+          >
+            <option value="Comunidad">
+              Comunidad
+            </option>
+
+            <option value="Cultura">
+              Cultura
+            </option>
+
+            <option value="Emprendimiento">
+              Emprendimiento
+            </option>
+
+            <option value="Eventos">
+              Eventos
+            </option>
+          </select>
+
+        </div>
+      </div>
+
+      <!-- CONTENIDO -->
+      <div class="grupo-campo">
+
+        <label for="contenido">
+          ¿Qué quieres compartir?
+        </label>
+
+        <textarea
+          id="contenido"
+          [(ngModel)]="contenido"
+          rows="5"
+          maxlength="2000"
+          placeholder="Escribe aquí tu publicación..."
+          class="textarea-estilizado"
+          [disabled]="guardando"
+        ></textarea>
+
+        <span class="contador-caracteres">
+          {{ contenido.length }} / 2000 caracteres
+        </span>
+
+      </div>
+
+      <!-- FOTOGRAFÍA -->
+      <div class="grupo-campo">
+
+        <label>
+          Fotografía de la publicación
+          <span class="texto-opcional">
+            (Opcional)
+          </span>
+        </label>
+
+        <p class="descripcion-imagen">
+          Agrega una fotografía para acompañar
+          tu publicación y compartirla con
+          la comunidad.
+        </p>
+
+        <input
+          #selectorImagen
+          type="file"
+          accept="image/jpeg,image/png,image/webp"
+          class="input-archivo-oculto"
+          (change)="seleccionarImagen($event)"
+          [disabled]="guardando"
+        />
+
+        <!-- SELECCIONAR IMAGEN -->
+        <button
+          *ngIf="!vistaPreviaImagen"
+          type="button"
+          class="boton-agregar-imagen"
+          (click)="selectorImagen.click()"
+          [disabled]="guardando"
+        >
+
+          <ion-icon
+            name="image-outline"
+          ></ion-icon>
+
+          <span class="titulo-agregar-imagen">
+            Agregar fotografía
+          </span>
+
+          <span class="subtitulo-agregar-imagen">
+            Selecciona una imagen de tu dispositivo
+          </span>
+
+          <span class="formato-imagen">
+            JPG, PNG o WEBP · Máximo 5 MB
+          </span>
+
+        </button>
+
+        <!-- VISTA PREVIA -->
+        <div
+          *ngIf="vistaPreviaImagen"
+          class="contenedor-vista-previa"
+        >
+
+          <div class="encabezado-vista-previa">
+
+            <span>
+              Fotografía seleccionada
+            </span>
+
+            <button
+              type="button"
+              class="boton-quitar-imagen"
+              (click)="quitarImagen()"
+              [disabled]="guardando"
+            >
+              <ion-icon
+                name="close-circle-outline"
+              ></ion-icon>
+
+              Quitar
+            </button>
+
+          </div>
+
+          <img
+            [src]="vistaPreviaImagen"
+            alt="Vista previa de la fotografía"
+            class="imagen-vista-previa"
+          />
+
+          <button
+            type="button"
+            class="boton-cambiar-imagen"
+            (click)="selectorImagen.click()"
+            [disabled]="guardando"
+          >
+            Cambiar fotografía
+          </button>
+
+        </div>
+
+      </div>
+
+      <!-- MENSAJES -->
+      <div
+        *ngIf="mensaje"
+        class="alerta-mensaje"
+        [ngClass]="tipoMensaje"
+        role="status"
+      >
+        {{ mensaje }}
+      </div>
+
+      <!-- PUBLICAR -->
+      <ion-button
+        expand="block"
+        class="boton-publicar"
+        (click)="guardarPublicacion()"
+        [disabled]="guardando"
+      >
+
+        <span *ngIf="!guardando">
+          PUBLICAR
+        </span>
+
+        <span *ngIf="guardando">
+          Guardando publicación...
+        </span>
+
+      </ion-button>
+
+      <!-- VOLVER -->
+      <div class="contenedor-volver">
+
+        <button
+          type="button"
+          class="enlace-volver"
+          (click)="volverAlInicio()"
+        >
+          <ion-icon
+            name="arrow-back-outline"
+          ></ion-icon>
+
+          Volver al Inicio
+        </button>
+
+      </div>
+
+    </div>
+
+  </div>
+</ion-content>
+
+<!-- NAVEGACIÓN INFERIOR -->
+<ion-footer class="navegacion-inferior">
+
+  <ion-toolbar>
+
+    <div class="menu-inferior">
+
+      <a
+        routerLink="/home"
+        routerLinkActive="activo"
+      >
+        <ion-icon name="home-outline"></ion-icon>
+        <span>Inicio</span>
+      </a>
+
+      <a
+        routerLink="/explorar"
+        routerLinkActive="activo"
+      >
+        <ion-icon name="compass-outline"></ion-icon>
+        <span>Explorar</span>
+      </a>
+
+      <a
+        routerLink="/publicar"
+        routerLinkActive="activo"
+      >
+        <ion-icon name="add-circle-outline"></ion-icon>
+        <span>Publicar</span>
+      </a>
+
+      <a
+        routerLink="/chatbot"
+        routerLinkActive="activo"
+      >
+        <ion-icon name="chatbubbles-outline"></ion-icon>
+        <span>Chatbot</span>
+      </a>
+
+      <a
+        routerLink="/perfil"
+        routerLinkActive="activo"
+      >
+        <ion-icon name="person-circle-outline"></ion-icon>
+        <span>Perfil</span>
+      </a>
+
+    </div>
+
+  </ion-toolbar>
+
+</ion-footer>

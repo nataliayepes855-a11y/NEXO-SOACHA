@@ -1,0 +1,195 @@
+
+<ion-header class="encabezado-recuperacion">
+  <ion-toolbar>
+    <div class="contenido-encabezado">
+      <span class="nombre-plataforma">
+        NEXO <span>SOACHA</span>
+      </span>
+    </div>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="pagina-recuperacion">
+  <main class="contenedor-recuperacion">
+
+    <div class="logo">NS</div>
+
+    <section class="tarjeta-recuperacion">
+
+      @if (verificando) {
+
+        <h2>Verificando enlace...</h2>
+
+        <p class="descripcion">
+          Estamos comprobando tu solicitud
+          de recuperación de contraseña.
+        </p>
+
+      } @else if (completado) {
+
+        <h2>¡Contraseña actualizada!</h2>
+
+        <p class="descripcion">
+          Tu contraseña se cambió correctamente.
+          Ahora puedes ingresar a NEXO SOACHA.
+        </p>
+
+      } @else if (enlaceValido) {
+
+        <h2>Crear nueva contraseña</h2>
+
+        <p class="descripcion">
+          Escribe una contraseña nueva para
+          recuperar el acceso a tu cuenta.
+        </p>
+
+        <form
+          (ngSubmit)="guardarContrasena()"
+          novalidate
+        >
+
+          <label for="nuevaContrasena">
+            Nueva contraseña
+          </label>
+
+          <div class="campo-contrasena">
+            <input
+              id="nuevaContrasena"
+              name="nuevaContrasena"
+              [type]="mostrarContrasena ? 'text' : 'password'"
+              [(ngModel)]="contrasena"
+              placeholder="Escribe tu nueva contraseña"
+              autocomplete="new-password"
+              minlength="8"
+            />
+
+            <button
+              type="button"
+              class="boton-ojo"
+              (click)="alternarContrasena()"
+              [attr.aria-label]="
+                mostrarContrasena
+                  ? 'Ocultar contraseña'
+                  : 'Mostrar contraseña'
+              "
+            >
+              {{ mostrarContrasena ? 'Ocultar' : 'Mostrar' }}
+            </button>
+          </div>
+
+          <p class="ayuda">
+            Utiliza al menos 8 caracteres.
+          </p>
+
+          <label for="confirmarNueva">
+            Confirmar nueva contraseña
+          </label>
+
+          <div class="campo-contrasena">
+            <input
+              id="confirmarNueva"
+              name="confirmarNueva"
+              [type]="mostrarConfirmacion ? 'text' : 'password'"
+              [(ngModel)]="confirmarContrasena"
+              placeholder="Repite tu nueva contraseña"
+              autocomplete="new-password"
+              minlength="8"
+            />
+
+            <button
+              type="button"
+              class="boton-ojo"
+              (click)="alternarConfirmacion()"
+              [attr.aria-label]="
+                mostrarConfirmacion
+                  ? 'Ocultar confirmación'
+                  : 'Mostrar confirmación'
+              "
+            >
+              {{ mostrarConfirmacion ? 'Ocultar' : 'Mostrar' }}
+            </button>
+          </div>
+
+          @if (
+            confirmarContrasena &&
+            contrasena !== confirmarContrasena
+          ) {
+            <p class="validacion-error">
+              Las contraseñas no coinciden.
+            </p>
+          }
+
+          @if (
+            confirmarContrasena &&
+            contrasena === confirmarContrasena
+          ) {
+            <p class="validacion-exito">
+              Las contraseñas coinciden.
+            </p>
+          }
+
+          @if (mensaje) {
+            <div
+              class="mensaje"
+              [class.error]="tipoMensaje === 'error'"
+              [class.exito]="tipoMensaje === 'exito'"
+              role="status"
+            >
+              {{ mensaje }}
+            </div>
+          }
+
+          <ion-button
+            type="submit"
+            expand="block"
+            [disabled]="guardando"
+          >
+            @if (guardando) {
+              Guardando...
+            } @else {
+              Actualizar contraseña
+            }
+          </ion-button>
+
+        </form>
+
+      } @else {
+
+        <h2>Enlace no disponible</h2>
+
+        <p class="descripcion">
+          No pudimos verificar tu enlace de recuperación.
+        </p>
+
+      }
+
+      @if (!verificando && (completado || !enlaceValido)) {
+
+        @if (mensaje) {
+          <div
+            class="mensaje"
+            [class.error]="tipoMensaje === 'error'"
+            [class.exito]="tipoMensaje === 'exito'"
+            role="status"
+          >
+            {{ mensaje }}
+          </div>
+        }
+
+        <ion-button
+          expand="block"
+          (click)="volverAlLogin()"
+        >
+          Volver a iniciar sesión
+        </ion-button>
+
+      }
+
+    </section>
+
+    <p class="pie">
+      NEXO SOACHA · Una comunidad más conectada.
+    </p>
+
+  </main>
+</ion-content>
