@@ -253,13 +253,24 @@ export class SupabaseService {
     const ruta =
       `${usuarioId}/${nombreArchivo}`;
 
-    const { error } =
-      await this.supabase.storage
-        .from(this.bucketImagenes)
-        .upload(ruta, archivo, {
-          contentType: archivo.type,
-          upsert: false,
-        });
+    // Leer el contenido de la fotografía
+const contenidoImagen = await archivo.arrayBuffer();
+
+// Verificar que la fotografía tenga contenido
+if (contenidoImagen.byteLength === 0) {
+  throw new Error(
+    'La fotografía está vacía o no se pudo leer. Selecciona otra imagen.'
+  );
+}
+
+// Subir la fotografía a Supabase Storage
+const { error } =
+  await this.supabase.storage
+    .from(this.bucketImagenes)
+    .upload(ruta, contenidoImagen, {
+      contentType: archivo.type,
+      upsert: false,
+    });
 
     if (error) {
       console.error(
