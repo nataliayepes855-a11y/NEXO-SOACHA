@@ -57,8 +57,13 @@ export class PublicarPage implements OnDestroy {
   vistaPreviaImagen: string | null = null;
 
   guardando = false;
+  seleccionandoImagen = false;
+
   mensaje = '';
   tipoMensaje: 'exito' | 'error' | '' = '';
+
+  private seleccionActual = 0;
+  private destruido = false;
 
   constructor(
     private supabaseService: SupabaseService,
@@ -77,7 +82,15 @@ export class PublicarPage implements OnDestroy {
     });
   }
 
-  seleccionarImagen(evento: Event): void {
+  // ==========================================
+  // SELECCIONAR FOTOGRAFÍA
+  // ==========================================
+
+  async seleccionarImagen(evento: Event): Promise<void> {
+
+    if (this.guardando) {
+      return;
+    }
 
     const input = evento.target as HTMLInputElement;
     const archivo = input.files?.[0];
@@ -86,8 +99,13 @@ export class PublicarPage implements OnDestroy {
       return;
     }
 
+    const seleccion = ++this.seleccionActual;
+
     this.mensaje = '';
     this.tipoMensaje = '';
+    this.seleccionandoImagen = true;
+
+    this.actualizarVista();
 
     const tiposPermitidos = [
       'image/jpeg',
@@ -95,37 +113,103 @@ export class PublicarPage implements OnDestroy {
       'image/webp',
     ];
 
-    if (!tiposPermitidos.includes(archivo.type)) {
+    try {
+
+      if (!tiposPermitidos.includes(archivo.type)) {
+        throw new Error(
+          'Selecciona una imagen JPG, PNG o WEBP.'
+        );
+      }
+
+      const tamanoMaximo = 5 * 1024 * 1024;
+
+      if (archivo.size === 0) {
+        throw new Error(
+          'La fotografía está vacía. Selecciona otra imagen.'
+        );
+      }
+
+      if (archivo.size > tamanoMaximo) {
+        throw new Error(
+          'La fotografía no puede superar los 5 MB.'
+        );
+      }
+
+      // Leer la fotografía inmediatamente.
+      const contenido = await archivo.arrayBuffer();
+
+      if (contenido.byteLength === 0) {
+        throw new Error(
+          'No se pudo leer el contenido de la fotografía.'
+        );
+      }
+
+      // Ignorar una lectura antigua si se seleccionó
+      // otra fotografía mientras tanto.
+      if (
+        this.destruido ||
+        seleccion !== this.seleccionActual
+      ) {
+        return;
+      }
+
+      // Crear una copia independiente del archivo original.
+      const copia = new File(
+        [contenido],
+        archivo.name || 'fotografia.jpg',
+        {
+          type: archivo.type,
+          lastModified: Date.now(),
+        }
+      );
+
+      // Crear la vista previa desde la copia.
+      const nuevaVistaPrevia =
+        URL.createObjectURL(copia);
+
+      this.liberarVistaPrevia();
+
+      this.imagenSeleccionada = copia;
+      this.vistaPreviaImagen = nuevaVistaPrevia;
+
+    } catch (error) {
+
+      console.error(
+        'Error al seleccionar fotografía:',
+        error
+      );
+
+      if (
+        this.destruido ||
+        seleccion !== this.seleccionActual
+      ) {
+        return;
+      }
+
       this.mensaje =
-        'Selecciona una imagen JPG, PNG o WEBP.';
+        error instanceof Error
+          ? error.message
+          : 'No se pudo leer la fotografía seleccionada.';
+
       this.tipoMensaje = 'error';
+
+    } finally {
+
+      // Limpiar el selector únicamente después
+      // de terminar de leer la fotografía.
       input.value = '';
-      this.cdr.detectChanges();
-      return;
+
+      if (seleccion === this.seleccionActual) {
+        this.seleccionandoImagen = false;
+      }
+
+      this.actualizarVista();
     }
-
-    const tamanoMaximo = 5 * 1024 * 1024;
-
-    if (archivo.size > tamanoMaximo) {
-      this.mensaje =
-        'La fotografía no puede superar los 5 MB.';
-      this.tipoMensaje = 'error';
-      input.value = '';
-      this.cdr.detectChanges();
-      return;
-    }
-
-    this.liberarVistaPrevia();
-
-    this.imagenSeleccionada = archivo;
-
-    this.vistaPreviaImagen =
-      URL.createObjectURL(archivo);
-
-    input.value = '';
-
-    this.cdr.detectChanges();
   }
+
+  // ==========================================
+  // QUITAR FOTOGRAFÍA
+  // ==========================================
 
   quitarImagen(): void {
 
@@ -133,16 +217,26 @@ export class PublicarPage implements OnDestroy {
       return;
     }
 
+    this.seleccionActual++;
+
     this.liberarVistaPrevia();
 
     this.imagenSeleccionada = null;
+    this.seleccionandoImagen = false;
 
-    this.cdr.detectChanges();
+    this.mensaje = '';
+    this.tipoMensaje = '';
+
+    this.actualizarVista();
   }
+
+  // ==========================================
+  // GUARDAR PUBLICACIÓN
+  // ==========================================
 
   async guardarPublicacion(): Promise<void> {
 
-    if (this.guardando) {
+    if (this.guardando || this.seleccionandoImagen) {
       return;
     }
 
@@ -166,7 +260,7 @@ export class PublicarPage implements OnDestroy {
     }
 
     this.guardando = true;
-    this.cdr.detectChanges();
+    this.actualizarVista();
 
     try {
 
@@ -187,7 +281,7 @@ export class PublicarPage implements OnDestroy {
       this.liberarVistaPrevia();
       this.imagenSeleccionada = null;
 
-      this.cdr.detectChanges();
+      this.actualizarVista();
 
       await new Promise<void>((resolve) =>
         setTimeout(resolve, 1000)
@@ -212,13 +306,21 @@ export class PublicarPage implements OnDestroy {
     } finally {
 
       this.guardando = false;
-      this.cdr.detectChanges();
+      this.actualizarVista();
     }
   }
+
+  // ==========================================
+  // NAVEGACIÓN
+  // ==========================================
 
   volverAlInicio(): void {
     void this.router.navigateByUrl('/home');
   }
+
+  // ==========================================
+  // LIBERAR RECURSOS
+  // ==========================================
 
   private liberarVistaPrevia(): void {
 
@@ -228,7 +330,18 @@ export class PublicarPage implements OnDestroy {
     }
   }
 
+  private actualizarVista(): void {
+
+    if (!this.destruido) {
+      this.cdr.detectChanges();
+    }
+  }
+
   ngOnDestroy(): void {
+
+    this.destruido = true;
+    this.seleccionActual++;
+
     this.liberarVistaPrevia();
   }
 }

@@ -37,7 +37,7 @@
             id="categoria"
             [(ngModel)]="categoria"
             class="input-estilizado"
-            [disabled]="guardando"
+            [disabled]="guardando || seleccionandoImagen"
           >
             <option value="Comunidad">
               Comunidad
